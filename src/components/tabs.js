@@ -28,8 +28,6 @@
   
     return topicsDiv
 }
-
-const tabsAppender = (selector) => {
   // TASK 4
   // ---------------------
   // Implement this function which takes a css selector as its only argument.
@@ -37,6 +35,15 @@ const tabsAppender = (selector) => {
   // Find the array of topics inside the response, and create the tabs using the Tabs component.
   // Append the tabs to the element in the DOM that matches the selector passed to the function.
   //
+  const tabsAppender = (selector) => {
+    const promise = fetch (`http://localhost:5001/api/topics`)
+    promise.then(response => response.json()).then(topics => {
+      const tabList = new Tabs(topics)
+      const element = document.querySelector(selector)
+      element.appendChild(tabList)
+  
+    })
+
 }
 
 export { Tabs, tabsAppender }
