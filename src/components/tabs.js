@@ -35,15 +35,31 @@
   // Find the array of topics inside the response, and create the tabs using the Tabs component.
   // Append the tabs to the element in the DOM that matches the selector passed to the function.
   //
-  const tabsAppender = (selector) => {
-    const promise = fetch (`http://localhost:5001/api/topics`)
-    promise.then(response => response.json()).then(topics => {
-      const tabList = new Tabs(topics)
-      const element = document.querySelector(selector)
-      element.appendChild(tabList)
-  
-    })
+  const tabsAppender =  (selector) => {
+    return new Promise ((resolve, reject) => {
+      fetch (`http://localhost:5001/api/topics` )
+      .then (response => response.json())
+      .then(data => {
+        const topicsArray = data.topics
 
-}
+        const tabComponent = Tabs(topicsArray)
+        const targetElement = document.querySelector(selector)
+
+        if (targetElement) {
+          targetElement.appendChild(tabComponent)
+          resolve()
+        }else {
+          reject('Target Element Not Found')
+        }
+      })
+      .catch(error => {
+        reject('Error fetching data' + error)
+      })
+    })
+  }
+
+
 
 export { Tabs, tabsAppender }
+
+
