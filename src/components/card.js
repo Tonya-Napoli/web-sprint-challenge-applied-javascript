@@ -1,3 +1,4 @@
+import axios from 'axios'
  // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -52,8 +53,6 @@ const Card = (article) => {
   return card
 }
 
-  
-
 
 // TASK 6
   // ---------------------
@@ -63,40 +62,23 @@ const Card = (article) => {
   // Create a card from each and every article object in the response, using the Card component.
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
-import axios from 'axios'
-const cardAppender = (selector) => {
-  axios.get(`http://localhost:5001/api/articles` )
 
-  .then(response => {
-    const data = response.data
-
-   // console.log(data)
-
-    for (const category in data) {
-      if(data.hasOwnProperty(category)) {
-        const categoryArticles = data[category]
-
-      console.log(`Category: ${category}`, categoryArticles)
-
-        for (const article of categoryArticles) {
-          const card = Card(article)
-
-          const targetElement = document.querySelector(selector)
-          if (targetElement) {
-            targetElement.appendChild(card)
-          }else {
-            console.error('Target element not found')
-          }
-        }
-      }
-    }
+const cardAppender = async (selector) => {
+ const response = await axios.get('http://localhost:5001/api/articles')
+  const articles = response.data.articles.map(article => ({
+    headline: article.headline,
+    authorName: article.authorName,
+    authorPhoto: article.authorPhoto
+  }))
+  const container = document.querySelector(selector)
+  articles.forEach(article => {
+    const card = Card(article)
+    container.appendChild(card)
   })
-  .catch(error => {
-    console.error('Error fetching Data', error)
-
-    
-  })
-}
-
-
+}  
 export { Card, cardAppender }
+
+
+
+
+console.log("test")
