@@ -63,14 +63,6 @@ const Card = (article) => {
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
 
-
-
-
-  import axios from 'axios';
-
-  const Card = (article) => {
-    // ... (Card component implementation)
-  };
   
   const cardAppender = (selector) => {
     return new Promise((resolve, reject) => {
