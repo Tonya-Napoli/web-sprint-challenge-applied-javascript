@@ -70,8 +70,8 @@ const Card = (article) => {
         .then(response => {
           const responseData = response.data; // Assuming response data is an object
   
-          // Check if articles is an array in the nested response structure
-          const articles = responseData.articles || [];
+          // Adapt your code to access articles from the correct location
+          const articles = responseData.data.articles || [];
   
           if (!Array.isArray(articles)) {
             reject('Articles data is not in the expected format.');
@@ -96,6 +96,7 @@ const Card = (article) => {
   };
   
   export { Card, cardAppender };
+  
   
   
 
