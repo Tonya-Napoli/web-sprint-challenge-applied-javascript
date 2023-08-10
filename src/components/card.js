@@ -66,12 +66,25 @@ const Card = (article) => {
 
 
 
+  import axios from 'axios';
+
+  const Card = (article) => {
+    // ... (Card component implementation)
+  };
   
   const cardAppender = (selector) => {
     return new Promise((resolve, reject) => {
       axios.get('http://localhost:5001/api/articles')
         .then(response => {
-          const articles = response.data.articles;
+          const responseData = response.data; // Assuming response data is an object
+  
+          // Check if articles is an array in the nested response structure
+          const articles = responseData.articles || [];
+  
+          if (!Array.isArray(articles)) {
+            reject('Articles data is not in the expected format.');
+            return;
+          }
   
           const cards = articles.map(article => Card(article));
   
@@ -91,5 +104,6 @@ const Card = (article) => {
   };
   
   export { Card, cardAppender };
+  
   
 
