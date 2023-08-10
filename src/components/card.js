@@ -63,22 +63,33 @@ const Card = (article) => {
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
 
-const cardAppender = async (selector) => {
- const response = await axios.get('http://localhost:5001/api/articles')
-  const articles = response.data.articles.map(article => ({
-    headline: article.headline,
-    authorName: article.authorName,
-    authorPhoto: article.authorPhoto
-  }))
-  const container = document.querySelector(selector)
-  articles.forEach(article => {
-    const card = Card(article)
-    container.appendChild(card)
-  })
-}  
-export { Card, cardAppender }
 
 
 
+  
+  const cardAppender = (selector) => {
+    return new Promise((resolve, reject) => {
+      axios.get('http://localhost:5001/api/articles')
+        .then(response => {
+          const articles = response.data.articles;
+  
+          const cards = articles.map(article => Card(article));
+  
+          const targetElement = document.querySelector(selector);
+  
+          cards.forEach(card => {
+            targetElement.appendChild(card);
+          });
+  
+          resolve(cards); // Resolve with the array of created cards
+        })
+        .catch(error => {
+          console.error('Error fetching articles:', error);
+          reject(error); // Reject with the error message
+        });
+    });
+  };
+  
+  export { Card, cardAppender };
+  
 
-console.log("test")
