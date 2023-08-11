@@ -68,16 +68,22 @@ const Card = (article) => {
   
     axios.get('http://localhost:5001/api/articles')
       .then (response => {
-        const articles = Object.values(response.data)//extract article objects from reponse
+        const articles = []
 
-        const container = document.querySelector(selector);
-        
+        //interate over each property in the response data object and extract article objects
+        for (const topic in response.data.articles) {
+          //push all articles of the current topic into the articles array
+          articles.push(...response.data.articles[topic])
+          }
+  
+
+        const container = document.querySelector(selector)
         if (container) {
           articles.forEach(article => {
-          const card = Card(article);
-          container.appendChild(card);
-  
-        });
+            const card = Card(article)
+            container.appendChild(card)
+          })
+        
   
       } else {
   
