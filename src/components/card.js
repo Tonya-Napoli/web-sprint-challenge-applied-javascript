@@ -1,4 +1,5 @@
 import axios from 'axios'
+
  // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -62,41 +63,39 @@ const Card = (article) => {
   // Create a card from each and every article object in the response, using the Card component.
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
+  const cardAppender =  (selector) => {
+    
+  
+    axios.get('http://localhost:5001/api/articles')
+      .then (response => {
+        const articles = Object.values(response.data)//extract article objects from reponse
 
+        const container = document.querySelector(selector);
+        
+        if (container) {
+          articles.forEach(article => {
+          const card = Card(article);
+          container.appendChild(card);
   
-  const cardAppender = (selector) => {
-    return new Promise((resolve, reject) => {
-      axios.get('http://localhost:5001/api/articles')
-        .then(response => {
-          const responseData = response.data; // Assuming response data is an object
-  
-          // Adapt your code to access articles from the correct location
-          const articles = responseData.data.articles || [];
-  
-          if (!Array.isArray(articles)) {
-            reject('Articles data is not in the expected format.');
-            return;
-          }
-  
-          const cards = articles.map(article => Card(article));
-  
-          const targetElement = document.querySelector(selector);
-  
-          cards.forEach(card => {
-            targetElement.appendChild(card);
-          });
-  
-          resolve(cards); // Resolve with the array of created cards
-        })
-        .catch(error => {
-          console.error('Error fetching articles:', error);
-          reject(error); // Reject with the error message
         });
-    });
-  };
   
-  export { Card, cardAppender };
+      } else {
   
+        console.error('Element not found with selector: ' + selector);
   
+      }
+    })
+  
+     .catch (error => {
+  
+      console.error('Error fetching articles: ', error);
+     })
+    }
+    
+  export { Card, cardAppender }
+
+    
+
+
   
 
